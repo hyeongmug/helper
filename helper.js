@@ -169,5 +169,16 @@ function Helper() {
         return i;
     }
 
+    cls.closeWindow = function() {
+        if ( navigator.userAgent.match(/MSIE ([0-9]+)\./) ) {
+            window.opener = 'Self';
+            window.open('', '_parent', '');
+            window.close();
+        } else {
+            window.close(); // 일반적인 현재 창 닫기
+            window.open('about:blank', '_self').self.close(); // IE에서 묻지 않고 창 닫기
+        }
+    }
+
     cls.polyfill();
 }
