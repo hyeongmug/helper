@@ -170,7 +170,7 @@ function Helper() {
     }
 
     cls.closeWindow = function() {
-        if ( navigator.userAgent.match(/MSIE ([0-9]+)\./) ) {
+        if (navigator.userAgent.match(/MSIE ([0-9]+)\./)) {
             window.opener = 'Self';
             window.open('', '_parent', '');
             window.close();
