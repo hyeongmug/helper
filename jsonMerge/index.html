@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+	<meta charset="UTF-8">
+	<title>Document</title>
+</head>
+<body>
+	<script src="http://code.jquery.com/jquery-1.12.4.min.js"></script>
+	<script>
+
+
+		var data1;
+		var data2;
+
+		$.getJSON('data1.json',{},function(json1){
+			data1 = json1;
+
+			$.getJSON('data2.json',{},function(json2){
+
+				data2 = json2
+
+
+				var result = mergeJson(data1, data2);
+				$('body').text(result[1]);
+			});
+		}) 
+
+
+
+		function mergeJson(data1, data2) {
+
+ 			var calc = data1.legnth - data2.legnth >= 0;
+			var data = ( calc ? data1 : data2 );
+			var result = [];
+
+			for (var i=0; i < data.length; i++ ) {
+
+				console.log( Object.keys(data1[i]), Object.keys(data2[i]) );
+
+
+				var obj = {}
+
+				for (var j=0; j < Object.keys(data1[i]).length; j++) {
+
+					var key = Object.keys(data1[i])[j];
+					if ( Object.keys(data2[i]).indexOf(key) > -1 ) {
+						obj[key] = data2[i][key];
+					} else {
+						obj[key] = data1[i][key];
+					}
+				}
+
+				result.push(obj);
+
+			}
+
+			return [result, JSON.stringify(result)];
+		}
+
+
+
+	</script>
+</body>
+</html>
