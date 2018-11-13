@@ -216,5 +216,13 @@ function Helper() {
         });
     }
 
+    cls.min = function(_array) {
+        return Math.min.apply({}, _array)
+    }
+
+    cls.max = function(_array) {
+        return Math.max.apply({}, _array)
+    }
+
     cls.polyfill();
 }
