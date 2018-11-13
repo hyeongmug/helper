@@ -55,11 +55,11 @@ function Helper() {
         }
     }
 
-    cls.debounce = function(func, wait) {
-        cls.debounce.timer = null;
-        return function() {
-            clearTimeout(cls.debounce.timer);
-            cls.debounce.timer = setTimeout(function() {
+    cls.debounce = function() {
+        var timer = null;
+        return function(func, wait) {
+            clearTimeout(timer);
+            timer = setTimeout(function() {
                 func()
             }, wait);
         }
@@ -95,6 +95,22 @@ function Helper() {
         } else {
             return true;
         }
+    }
+
+    cls.escapeHTML = function(string) {
+        var entityMap = {
+            '&': '&amp;',
+            '<': '&lt;',
+            '>': '&gt;',
+            '"': '&quot;',
+            "'": '&#39;',
+            '/': '&#x2F;',
+            '`': '&#x60;',
+            '=': '&#x3D;'
+        };
+        return String(string).replace(/[&<>"'`=\/]/g, function(s) {
+            return entityMap[s];
+        });
     }
 
     cls.isMobile = function() {
@@ -178,6 +194,26 @@ function Helper() {
             window.close(); // 일반적인 현재 창 닫기
             window.open('about:blank', '_self').self.close(); // IE에서 묻지 않고 창 닫기
         }
+    }
+
+    cls.mouseWheel = function(el, downFunction, upFunction) {
+        var $el = $(el);
+        $el.on("mousewheel DOMMouseScroll", function(e) {
+            var event = e.originalEvent;
+            var delta = 0;
+
+            e.preventDefault();
+
+            // detail은 파이어폭스, wheelDelta은 익스,크롬
+            delta = event.detail ? event.detail * -40 : event.wheelDelta;
+
+            if (delta < 0 && downFunction != undefined) {
+                downFunction();
+            } else if (delta > 0 && upFunction != undefined) {
+                upFunction();
+            }
+
+        });
     }
 
     cls.polyfill();
