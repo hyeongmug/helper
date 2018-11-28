@@ -147,20 +147,20 @@ function Helper() {
         return result;
     }
 
-    cls.findObject = function(_array, _searchKey, _searchValue) {
+    cls.findObject = function(array, searchKey, searchValue) {
 
-        var inventory = _array;
+        var inventory = array;
 
         var result = inventory.find(function(object) {
-            return object[_searchKey] === _searchValue;
+            return object[searchKey] === searchValue;
         });
         return result;
     }
 
-    cls.customInterval = function(_selector, _callback) {
+    cls.waitLoad = function(selector, callback) {
         var interval = setInterval(function() {
-            if ($(_selector).length > 0) {
-                _callback();
+            if ($(selector).length > 0) {
+                callback();
                 clearInterval(interval);
             }
         });
@@ -216,15 +216,15 @@ function Helper() {
         });
     }
 
-    cls.min = function(_array) {
-        return Math.min.apply({}, _array)
+    cls.min = function(array) {
+        return Math.min.apply({}, array)
     }
 
-    cls.max = function(_array) {
-        return Math.max.apply({}, _array)
+    cls.max = function(array) {
+        return Math.max.apply({}, array)
     }
 
-    cls.shuffle = function() {
+    cls.shuffle = function(array) {
         var currentIndex = array.length,
             temporaryValue, randomIndex;
 
@@ -261,6 +261,67 @@ function Helper() {
     // Math.round() 를 사용하면 고르지 않은 분포를 얻게된다!
     cls.getRandomIntInclusive = function(min, max) {
         return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
+    cls.imageResize = function(img, ratio) {
+        var width = img.width;
+        var height = img.height;
+        var img_ratio = width / height;
+
+        if (!ratio) {
+            ratio = img.parentElement.offsetHeight;
+        }
+
+        if (ratio < img_ratio) {
+            resizeWidth = 'auto';
+            resizeHeight = '100%'
+        } else {
+            resizeWidth = '100%';
+            resizeHeight = 'auto';
+        }
+
+        // 리사이즈한 크기로 이미지 크기 다시 지정
+        img.style.width = resizeWidth;
+        img.style.height = resizeHeight;
+        img.style.maxWidth = 'none';
+        img.style.maxHeight = 'none';
+    }
+
+    cls.centerVideo = function(wrapSelector, innerSelector) {
+        // 동영상 비율이 16대 9일때 
+
+        var videoW, videoH, videoM_value;
+        var svl_outW = $(wrapSelector).outerWidth();
+        var svl_outH = $(wrapSelector).outerHeight();
+        var wrap = $(wrapSelector);
+        var inner = $(innerSelector);
+
+        if (svl_outH / svl_outW > 0.5617989417) {
+            //세로고정
+            videoW = (svl_outH / 9) * 16;
+            videoH = svl_outH;
+            videoM_value = (videoW - svl_outW) / 2;
+
+            inner.css({
+                "width": videoW,
+                "height": videoH,
+                "margin-top": 0,
+                "margin-left": -videoM_value
+            });
+        } else {
+            //가로고정
+            videoW = svl_outW;
+            videoH = (svl_outW / 16) * 9;
+            videoM_value = (videoH - svl_outH) / 2;
+
+            inner.css({
+                "width": videoW,
+                "height": videoH,
+                "margin-top": -videoM_value,
+                "margin-left": 0
+            });
+        }
+
     }
 
     cls.polyfill();
