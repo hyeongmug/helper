@@ -326,13 +326,13 @@ function Helper() {
 
     cls.unTargetEvent = function(unTarget, currentNode, callback) {
         if (currentNode != unTarget) {
-            currentNode = currentNode.parentNode;
             if (currentNode.tagName == "HTML") {
                 if (callback) {
                     callback();
                 }
                 return;
             }
+            currentNode = currentNode.parentNode;
             cls.unTargetEvent(unTarget, currentNode, (callback ? callback : ""));
         } else {
             return;
